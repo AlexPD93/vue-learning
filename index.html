@@ -91,6 +91,19 @@
         <input placeholder="Enter your email address" key="email-input" />
       </template>
     </div>
+    <ul id="list-example">
+      <li v-for="item in items" :key="item.message">{{item.message}}</li>
+    </ul>
+    <ul id="list-example-2">
+      <li v-for="(item, index) in items">
+        {{ parentMessage }} - {{ index }} - {{ item.message }}
+      </li>
+    </ul>
+    <ul id="v-for-object" class="demo">
+      <li v-for="(value, name, index) in object">
+        {{index + 1}}. {{name}}: {{value}}
+      </li>
+    </ul>
 
     <script src="https://cdn.jsdelivr.net/npm/axios@0.12.0/dist/axios.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/lodash@4.13.1/lodash.min.js"></script>
@@ -328,6 +341,32 @@
         data: {
           type: "B",
           loginType: "username",
+        },
+      });
+
+      const listExample = new Vue({
+        el: "#list-example",
+        data: {
+          items: [{ message: "Hello" }, { message: "There" }],
+        },
+      });
+
+      const example2 = new Vue({
+        el: "#list-example-2",
+        data: {
+          parentMessage: "Parent",
+          items: [{ message: "Alex" }, { message: "Maria" }],
+        },
+      });
+
+      new Vue({
+        el: "#v-for-object",
+        data: {
+          object: {
+            title: "How to do lists in Vue",
+            author: "Jane Doe",
+            publishedAt: new Date().toLocaleString(),
+          },
         },
       });
     </script>
