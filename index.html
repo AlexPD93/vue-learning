@@ -65,6 +65,18 @@
       </p>
       <p>{{ answer }}</p>
     </div>
+    <div id="objectSyntax">
+      <div v-bind:class="{ active: isActive }"></div>
+      <div class="static" v-bind:class="classObject">Obj</div>
+    </div>
+    <div id="arraySyntax">
+      <div
+        v-bind:class="[{active: isActive}, errorClass]"
+        v-bind:style="styleObject"
+      >
+        Arr
+      </div>
+    </div>
 
     <script src="https://cdn.jsdelivr.net/npm/axios@0.12.0/dist/axios.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/lodash@4.13.1/lodash.min.js"></script>
@@ -227,7 +239,7 @@
       });
       demo.fullName = "Alex Perez";
 
-      var watchExampleVM = new Vue({
+      const watchExampleVM = new Vue({
         el: "#watch-example",
         data: {
           question: "",
@@ -268,6 +280,32 @@
                 vm.answer = "Error! Could not reach the API. " + error;
               });
           },
+        },
+      });
+      const objSyntax = new Vue({
+        el: "#objectSyntax",
+        data: {
+          isActive: true,
+          hasError: null,
+        },
+        computed: {
+          classObject() {
+            return {
+              active: this.isActive && !this.error,
+              "text-danger": this.error && this.error.type === "fatal",
+            };
+          },
+        },
+      });
+      const arrSyntax = new Vue({
+        el: "#arraySyntax",
+        data: {
+          styleObject: {
+            color: "red",
+            fontSize: "30px",
+          },
+          activeClass: "active",
+          errorClass: "text-danger",
         },
       });
     </script>
