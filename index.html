@@ -123,6 +123,29 @@
         console.log(newValue);
       });
       vm.a = "b";
+      new Vue({
+        data: {
+          a: 1,
+        },
+        beforeCreate() {
+          console.log("beforeCreate", this.a);
+        },
+        created() {
+          console.log("created", this.a);
+        },
+        beforeMount() {
+          console.log("a is: " + this.a);
+        },
+        mounted() {
+          console.log("mounted" + this.a, "hello");
+        },
+        beforeDestroy() {
+          console.log("beforeDestroy - turn off listeners", this.a);
+        },
+        destroyed() {
+          console.log("destroyed", this.a);
+        },
+      });
     </script>
   </body>
 </html>
