@@ -104,6 +104,9 @@
         {{index + 1}}. {{name}}: {{value}}
       </li>
     </ul>
+    <ul id="sorted-numbers">
+      <li v-for="n in evenNumbers">{{n}}</li>
+    </ul>
 
     <script src="https://cdn.jsdelivr.net/npm/axios@0.12.0/dist/axios.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/lodash@4.13.1/lodash.min.js"></script>
@@ -351,6 +354,10 @@
         },
       });
 
+      listExample.items = listExample.items.filter(function (item) {
+        return item.message.match(/Hello/);
+      });
+
       const example2 = new Vue({
         el: "#list-example-2",
         data: {
@@ -359,6 +366,8 @@
         },
       });
 
+      example2.items.push({ message: "Baz" }, { message: "Meow" });
+
       new Vue({
         el: "#v-for-object",
         data: {
@@ -366,6 +375,20 @@
             title: "How to do lists in Vue",
             author: "Jane Doe",
             publishedAt: new Date().toLocaleString(),
+          },
+        },
+      });
+
+      new Vue({
+        el: "#sorted-numbers",
+        data: {
+          numbers: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+        },
+        computed: {
+          evenNumbers: function () {
+            return this.numbers.filter(function (number) {
+              return number % 2 === 0;
+            });
           },
         },
       });
