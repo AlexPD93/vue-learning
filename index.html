@@ -37,6 +37,13 @@
         ></todo-item>
       </ol>
     </div>
+    <div id="app8">
+      <p>{{ foo }}</p>
+      <button v-on:click="foo = 'baz'">Change it</button>
+    </div>
+    <div id="example">
+      <p>Hello</p>
+    </div>
 
     <script>
       const app = new Vue({
@@ -99,6 +106,23 @@
           ],
         },
       });
+      const data = { a: 1 };
+      const vm = new Vue({
+        el: "#example",
+        data: data,
+      });
+      const obj = {
+        foo: "bar",
+      };
+      Object.freeze(obj);
+      new Vue({
+        el: "#app8",
+        data: obj,
+      });
+      vm.$watch("a", function (newValue, oldValue) {
+        console.log(newValue);
+      });
+      vm.a = "b";
     </script>
   </body>
 </html>
