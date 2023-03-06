@@ -44,7 +44,30 @@
     <div id="example">
       <p>Hello</p>
     </div>
+    <div id="html">
+      <p>I said {{msg}}</p>
+      <p v-bind:id="dynamicId">Using mustaches: {{ rawHtml }}</p>
+      <p>Using v-html directive: <span v-html="rawHtml"></span></p>
+      <p v-if="dynamicId">Now you see me</p>
+      <button v-on:click="changeId">Increase id number</button>
+    </div>
+    <div id="computedPropertyExample">
+      <p>Original message: "{{ message }}"</p>
+      <p>Computed reversed message: "{{ reversedMessage }}"</p>
+      <p>Message:{{message2}}</p>
+      <p>Method reversed message: "{{reverseMessage()}}"</p>
+    </div>
+    <div id="demo">{{fullName}}</div>
+    <div id="watch-example">
+      <p>
+        Ask a yes/no question:
+        <input v-model="question" />
+      </p>
+      <p>{{ answer }}</p>
+    </div>
 
+    <script src="https://cdn.jsdelivr.net/npm/axios@0.12.0/dist/axios.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/lodash@4.13.1/lodash.min.js"></script>
     <script>
       const app = new Vue({
         el: "#app",
@@ -144,6 +167,107 @@
         },
         destroyed() {
           console.log("destroyed", this.a);
+        },
+      });
+      const msgObj = {
+        msg: "Hello",
+        rawHtml: "<span style='color:red'>This should be red.</span>",
+        dynamicId: 10 + 2,
+      };
+
+      new Vue({
+        el: "#html",
+        data: msgObj,
+        methods: {
+          changeId() {
+            this.dynamicId++;
+          },
+        },
+      });
+      const computed = new Vue({
+        el: "#computedPropertyExample",
+        data: {
+          message: "Hello",
+          message2: "Cheese",
+        },
+        computed: {
+          // a computed getter
+          reversedMessage() {
+            // `this` points to the computed instance
+            return this.message.split("").reverse().join("");
+          },
+        },
+        methods: {
+          reverseMessage() {
+            return this.message2.split("").reverse().join("");
+          },
+        },
+      });
+      computed.message = "Goodbye";
+      const demo = new Vue({
+        el: "#demo",
+        data: {
+          firstName: "Foo",
+          lastName: "Bar",
+        },
+        computed: {
+          fullName: {
+            // getter
+            get: function () {
+              return this.firstName + " " + this.lastName;
+            },
+            // setter
+            set: function (newValue) {
+              var names = newValue.split(" ");
+              this.firstName = names[0];
+              this.lastName = names[names.length - 1];
+            },
+          },
+        },
+      });
+      demo.fullName = "Alex Perez";
+
+      var watchExampleVM = new Vue({
+        el: "#watch-example",
+        data: {
+          question: "",
+          answer: "I cannot give you an answer until you ask a question!",
+        },
+        watch: {
+          // whenever question changes, this function will run
+          question: function (newQuestion, oldQuestion) {
+            this.answer = "Waiting for you to stop typing...";
+            this.debouncedGetAnswer();
+          },
+        },
+        created: function () {
+          // _.debounce is a function provided by lodash to limit how
+          // often a particularly expensive operation can be run.
+          // In this case, we want to limit how often we access
+          // yesno.wtf/api, waiting until the user has completely
+          // finished typing before making the ajax request. To learn
+          // more about the _.debounce function (and its cousin
+          // _.throttle), visit: https://lodash.com/docs#debounce
+          this.debouncedGetAnswer = _.debounce(this.getAnswer, 500);
+        },
+        methods: {
+          getAnswer: function () {
+            if (this.question.indexOf("?") === -1) {
+              this.answer = "Questions usually contain a question mark. ;-)";
+              return;
+            }
+            this.answer = "Thinking...";
+            var vm = this;
+            axios
+              .get("https://yesno.wtf/api")
+              .then(function (response) {
+                console.log(response);
+                vm.answer = _.capitalize(response.data.answer);
+              })
+              .catch(function (error) {
+                vm.answer = "Error! Could not reach the API. " + error;
+              });
+          },
         },
       });
     </script>
