@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div id="app">
+      <h1>Vue.js Components fundamentals</h1>
+      <h2>Button counters</h2>
+
+      <click-counter></click-counter>
+      <click-counter></click-counter>
+      <click-counter></click-counter>
+      <click-counter></click-counter>
+      <plan-picker></plan-picker>
+    </div>
+
+    <script type="text/x-template" id="plan-picker-template">
+      <div class="plans">
+        <plan v-for="(plan, index) in plans" :name="plan" :key='plan.index'></plan>
+      </div>
+    </script>
+
+    <script type="text/x-template" id="click-counter-template">
+      <button v-on:click="count++">{{count}}</button>
+    </script>
+
+    <script type="text/x-template" id="plan-template">
+      <div class='plan'>
+        <div class='description'>
+            <span class='title'>{{name}}</span>
+        </div>
+      </div>
+    </script>
+
+    <script src="https://unpkg.com/vue@2"></script>
+    <script src="app.js"></script>
+  </body>
+</html>
