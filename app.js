@@ -14,6 +14,20 @@ let PlanComponent = {
       type: String,
       required: true,
     },
+    selectedPlan: {
+      type: String,
+    },
+  },
+  computed: {
+    isSelected() {
+      return this.name === this.selectedPlan;
+    },
+  },
+  methods: {
+    select() {
+      console.log(this.name);
+      this.$emit("select", this.name);
+    },
   },
 };
 
@@ -27,7 +41,13 @@ let PlanPickerComponent = {
   data() {
     return {
       plans: ["The Hacker", "The Sinner", "The Chosen One", "The Cheese"],
+      selectedPlan: null,
     };
+  },
+  methods: {
+    selectPlan(plan) {
+      this.selectedPlan = plan;
+    },
   },
 };
 
